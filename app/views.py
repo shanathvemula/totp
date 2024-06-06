@@ -10,12 +10,14 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
+import os
+
 import qrcode
 import qrcode.image.svg
-import cv2
 import base64
 
 from app.serializers import OTPVerifySerializer
+from totp.settings import MEDIA_URL, MEDIA_ROOT
 
 
 # Create your views here.
@@ -35,8 +37,9 @@ class TOTPSetupView(APIView):
 
                 provisioning_uri = device.config_url
                 img = qrcode.make(provisioning_uri, image_factory=qrcode.image.svg.SvgImage)
-                img.save('img.svg')
-                with open("img.svg", "rb") as img_file:
+                img_path = os.path.join(MEDIA_ROOT, 'img.svg')
+                img.save(img_path)
+                with open(img_path, "rb") as img_file:
                     # print(img_file.read())
                     my_string = base64.b64encode(img_file.read())
                 my_string = my_string.decode('utf-8')
