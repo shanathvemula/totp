@@ -12,4 +12,6 @@ class OTPAdmin(OTPAdminSite):
 admin_site = OTPAdmin(name='OTPAdmin')
 admin_site.register(User)
 admin_site.register(TOTPDevice, TOTPDeviceAdmin)
+admin.site.unregister(User)
+admin.site.register(User)
 # Register your models here.
